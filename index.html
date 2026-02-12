@@ -4,6 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Privacy: Prevent search engines from indexing this page -->
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
   <title>For Butki ❤️</title>
 
   <!-- Modern Tipography -->
@@ -261,11 +264,21 @@
     }
 
     .gallery .arrow.prev {
-      left: 60px;
+      left: 10px;
     }
 
     .gallery .arrow.next {
-      right: 60px;
+      right: 10px;
+    }
+
+    #memory-caption {
+      margin-top: 15px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--primary);
+      min-height: 1.5rem;
+      font-family: 'Playfair Display', serif;
+      transition: opacity 0.3s ease;
     }
 
     /* TEXT SCREENS */
@@ -1063,15 +1076,16 @@
 
   <!-- MEMORIES -->
   <div id="memories" class="glass-card screen">
-    <h1>Our Memories</h1>
     <div class="gallery" id="gallery">
       <div class="arrow prev" onclick="prevPhoto()">&#10094;</div>
       <div class="arrow next" onclick="manualNext()">&#10095;</div>
-      <img src="photo1.jpg" class="active">
-      <img src="photo2.jpeg">
-      <!-- Add more images here if they exist -->
+      <img src="Photo1.jpeg" class="active">
+      <img src="Photo2.jpeg">
+      <img src="Photo3.jpeg">
+      <img src="Photo4.jpeg">
     </div>
-    <button class="btn ghost" onclick="showScreen('menu')">Back</button>
+    <div id="memory-caption">Our first photo together 📸</div>
+    <button class="btn ghost" style="margin-top: 20px;" onclick="showScreen('menu')">Back</button>
   </div>
 
   <!-- SHAYARI -->
@@ -1429,6 +1443,23 @@
 
     // GALLERY LOGIC
     let galleryInterval, currentPhotoIndex = 0;
+    const photoCaptions = [
+      "Our first photo together 📸",
+      "My absolute favorite photo together ❤️",
+      "The memory of our first trip ✈️",
+      "Traditional Look – Simply Stunning ✨"
+    ];
+
+    function updateCaption() {
+      const cap = document.getElementById('memory-caption');
+      if (cap) {
+        gsap.to(cap, { opacity: 0, duration: 0.3, onComplete: () => {
+          cap.innerText = photoCaptions[currentPhotoIndex] || "";
+          gsap.to(cap, { opacity: 1, duration: 0.3 });
+        }});
+      }
+    }
+
     function startGallery() { stopGallery(); galleryInterval = setInterval(nextPhoto, 3000); }
     function stopGallery() { clearInterval(galleryInterval); }
     function updateGallery(isNext = true) {
@@ -1449,6 +1480,7 @@
         rotationY: -110, opacity: 0, duration: 1, ease: "power2.inOut", onComplete: () => {
           current.classList.remove('active');
           currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+          updateCaption();
           const next = photos[currentPhotoIndex];
           gsap.set(next, { rotationY: 110, opacity: 0 });
           next.classList.add('active');
@@ -1464,6 +1496,7 @@
         rotationY: 110, opacity: 0, duration: 1, ease: "power2.inOut", onComplete: () => {
           current.classList.remove('active');
           currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
+          updateCaption();
           const prev = photos[currentPhotoIndex];
           gsap.set(prev, { rotationY: -110, opacity: 0 });
           prev.classList.add('active');

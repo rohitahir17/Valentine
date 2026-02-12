@@ -805,9 +805,31 @@
     .shayari-slider .arrow.next { right: 10px; }
     #garden-canvas {
       cursor: crosshair;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 12px;
+      background: linear-gradient(180deg, #1a472a 0%, #0d2114 100%);
+      border: 2px solid #2d6a4f;
+      border-radius: 20px;
       margin: 10px 0;
+      width: 100%;
+      height: 300px;
+      touch-action: none;
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.6);
+    }
+
+    .garden-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .monkey-quote {
+      font-style: italic;
+      color: #9dffb0;
+      font-size: 0.9rem;
+      min-height: 1.2rem;
+      margin: 5px 0;
+      font-family: 'Comic Sans MS', cursive;
     }
 
     /* QUIZ */
@@ -826,15 +848,22 @@
       border-radius: 12px;
       cursor: pointer;
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .option-btn:hover {
-      background: rgba(255, 77, 109, 0.1);
-      border-color: var(--primary);
+    /* Prevent sticky hover on mobile */
+    @media (hover: hover) {
+      .option-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+      }
     }
 
     .correct {
       background: #2ecc71 !important;
+      animation: pulse 0.5s ease;
     }
 
     .wrong {
@@ -1036,10 +1065,16 @@
 
   <!-- GARDEN -->
   <div id="garden" class="glass-card screen">
-    <h1>Our Heart Garden</h1>
-    <p class="subtitle">Click anywhere to plant a flower of love</p>
-    <canvas id="garden-canvas" width="350" height="300"></canvas>
-    <button class="btn ghost" onclick="showScreen('menu')">Back</button>
+    <h1 style="font-size: 1.8rem; color: #74c69d;">Bandariya's Jumping Garden</h1>
+    <p class="subtitle" style="margin-bottom: 0.5rem;">Click to plant trees & watch Bandariya chhalang! 🐒</p>
+    <div id="monkey-status" class="monkey-quote">Bandariya is ready for jump!</div>
+    <div style="position: relative; width: 100%; max-width: 350px; margin: 0 auto;">
+      <canvas id="garden-canvas" width="350" height="300"></canvas>
+    </div>
+    <div class="garden-controls">
+      <button class="btn ghost" style="font-size: 0.75rem; padding: 8px 15px;" onclick="clearGarden()">🗑️ Reset</button>
+      <button class="btn ghost" style="font-size: 0.75rem; padding: 8px 15px;" onclick="showScreen('menu')">Back</button>
+    </div>
   </div>
 
   <!-- QUIZ -->
@@ -1218,8 +1253,9 @@
       const allScreens = document.querySelectorAll('.glass-card');
       const target = document.getElementById(screenId);
 
-      // Remove fade-in class to prevent CSS conflicts with GSAP display:none
-      allScreens.forEach(s => s.classList.remove('fade-in'));
+      allScreens.forEach(s => {
+        s.classList.remove('active', 'fade-in');
+      });
 
       gsap.to(allScreens, {
         opacity: 0,
@@ -1227,6 +1263,7 @@
         duration: 0.4,
         display: 'none',
         onComplete: () => {
+          target.classList.add('active');
           gsap.set(target, { display: 'flex', opacity: 0, y: 20 });
           gsap.to(target, { opacity: 1, y: 0, duration: 0.6, ease: "back.out(1.7)" });
 
@@ -1262,28 +1299,168 @@
       clockInterval = setInterval(update, 1000);
     }
 
-    // GARDEN
+    // MASTER GARDEN LOGIC
+    // BANDARIYA GARDEN LOGIC
+    let trees = [];
+    let monkeys = [];
+    const monkeyQuotes = [
+      "Bandariya is hungry for chhalang! 🐒",
+      "Look at that kudka! So fast! 💨",
+      "Panda is watching your flips! 🐼",
+      "Bandariya is the queen of trees! 👑",
+      "Oooh-aah-aah! Jumping time! 🍌",
+      "Catch me if you can, Panda! 🏃‍♀️",
+      "Wait! I need a banana break! 🍌😂",
+      "Bandariya loves jumping for you! ❤️",
+      "Doing a flip just because I can! 🤸‍♀️",
+      "Jungle queen on the move! 🌴",
+      "Monkeying around is my favorite style! 🐒",
+      "Stop staring, start planting trees! 🌳😂"
+    ];
+    
     function initGarden() {
       const canvas = document.getElementById('garden-canvas');
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, 350, 300);
+      trees = [];
+      monkeys = [{
+        x: 50, y: 250, targetX: 50, targetY: 250, 
+        jumpProg: 1, arcH: 0, startX: 50, startY: 250,
+        rotation: 0, isJumping: false, flip: 1
+      }];
+      
       canvas.onclick = (e) => {
         const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        drawFlower(ctx, x, y);
-        for (let i = 0; i < 5; i++) createHeart(e.clientX, e.clientY, true);
+        const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+        const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+        
+        trees.push({x, y: Math.max(y, 50), height: 40 + Math.random() * 40});
+        triggerJump(x, Math.max(y, 50) - 20);
+        
+        const status = document.getElementById('monkey-status');
+        status.innerText = monkeyQuotes[Math.floor(Math.random() * monkeyQuotes.length)];
+        gsap.from(status, {scale: 1.2, duration: 0.2});
       };
-    }
-    function drawFlower(ctx, x, y) {
-      ctx.fillStyle = "#ff4d6d";
-      for (let i = 0; i < 5; i++) {
-        ctx.beginPath();
-        ctx.arc(x + Math.cos(i * 1.2) * 10, y + Math.sin(i * 1.2) * 10, 8, 0, 7);
-        ctx.fill();
+
+      if (!window.gardenLoopStarted) {
+        window.gardenLoopStarted = true;
+        animateGarden();
       }
-      ctx.fillStyle = "#ffcc33";
-      ctx.beginPath(); ctx.arc(x, y, 6, 0, 7); ctx.fill();
+    }
+
+    function triggerJump(tx, ty) {
+      const m = monkeys[0];
+      if (m.isJumping) return;
+      
+      m.startX = m.x;
+      m.startY = m.y;
+      m.targetX = tx;
+      m.targetY = ty;
+      m.jumpProg = 0;
+      m.isJumping = true;
+      m.arcH = Math.min(Math.abs(tx - m.x) * 0.5, 100);
+      m.flip = tx > m.x ? 1 : -1;
+    }
+
+    function monkeyMagic() {
+      const canvas = document.getElementById('garden-canvas');
+      for(let i=0; i<10; i++){
+        setTimeout(() => {
+          const tx = Math.random() * canvas.width;
+          const ty = 50 + Math.random() * 200;
+          trees.push({x: tx, y: ty, height: 30 + Math.random() * 30});
+          monkeys.push({
+            x: Math.random() * canvas.width, y: canvas.height, 
+            targetX: tx, targetY: ty - 20,
+            startX: Math.random() * canvas.width, startY: canvas.height,
+            jumpProg: 0, arcH: 100, isJumping: true, rotation: 0, flip: 1
+          });
+        }, i * 200);
+      }
+    }
+
+    function drawMonkey(ctx, x, y, rot, flip) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rot);
+      ctx.scale(flip, 1);
+      
+      // Face
+      ctx.fillStyle = "#8d6e63";
+      ctx.beginPath();
+      ctx.arc(0, 0, 10, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Ears
+      ctx.beginPath();
+      ctx.arc(-8, -5, 4, 0, Math.PI * 2);
+      ctx.arc(8, -5, 4, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Mouth area
+      ctx.fillStyle = "#d7ccc8";
+      ctx.beginPath();
+      ctx.arc(0, 3, 6, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Eyes
+      ctx.fillStyle = "#000";
+      ctx.beginPath();
+      ctx.arc(-3, -2, 2, 0, Math.PI * 2);
+      ctx.arc(3, -2, 2, 0, Math.PI * 2);
+      ctx.fill();
+      
+      ctx.restore();
+    }
+
+    function animateGarden() {
+      const canvas = document.getElementById('garden-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw Trees
+      trees.forEach(t => {
+        ctx.fillStyle = "#3e2723";
+        ctx.fillRect(t.x - 3, t.y, 6, canvas.height - t.y);
+        ctx.fillStyle = "#2d6a4f";
+        ctx.beginPath();
+        ctx.arc(t.x, t.y, 15, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Update & Draw Monkeys
+      monkeys.forEach((m, idx) => {
+        if (m.isJumping) {
+          m.jumpProg += 0.02;
+          if (m.jumpProg >= 1) {
+            m.jumpProg = 1;
+            m.isJumping = false;
+            m.x = m.targetX;
+            m.y = m.targetY;
+            m.rotation = 0;
+          } else {
+            // Parabolic jump
+            m.x = m.startX + (m.targetX - m.startX) * m.jumpProg;
+            const lift = Math.sin(Math.PI * m.jumpProg) * m.arcH;
+            m.y = (m.startY + (m.targetY - m.startY) * m.jumpProg) - lift;
+            m.rotation += 0.1 * m.flip;
+          }
+        }
+        drawMonkey(ctx, m.x, m.y, m.rotation, m.flip);
+      });
+      
+      if (document.getElementById('garden').classList.contains('active')) {
+        requestAnimationFrame(animateGarden);
+      } else {
+        window.gardenLoopStarted = false;
+      }
+    }
+
+    function clearGarden() {
+      trees = [];
+      monkeys = [monkeys[0]]; // Keep initial monkey
+      monkeys[0].x = 50;
+      monkeys[0].y = 250;
+      monkeys[0].isJumping = false;
     }
 
     // QUIZ
@@ -1297,12 +1474,17 @@
       { q: "Where should we go for our next big trip?", o: ["To the Beach 🏖️", "To the Mountains 🏔️", "To a new Movie 🍿", "To the Vrindavan 🦚"], a: 3 },
       { q: "What was the first thing I ever gave you?", o: ["A Rose 🌹", "A Chocolate 🍫", "A small note 📝", "Just my heart ❤️"], a: 3 }
     ];
+    let quizLocked = false;
     function checkAnswer(idx) {
+      if (quizLocked) return;
       const btns = document.querySelectorAll('.option-btn');
+      
       if (idx === questions[currentQuizStep].a) {
+        quizLocked = true;
         btns[idx].classList.add('correct');
         setTimeout(() => {
           currentQuizStep++;
+          quizLocked = false;
           if (currentQuizStep >= questions.length) {
             finishQuiz();
           } else {
@@ -1321,13 +1503,14 @@
       document.getElementById('quiz-question').innerText = q.q;
       const btns = document.querySelectorAll('.quiz-options .option-btn');
       btns.forEach((b, i) => {
+        b.classList.remove('correct', 'wrong');
+        b.blur(); // Remove focus
         if (q.o[i]) {
           b.innerText = q.o[i];
           b.style.display = 'block';
         } else {
           b.style.display = 'none';
         }
-        b.classList.remove('correct', 'wrong');
       });
     }
 

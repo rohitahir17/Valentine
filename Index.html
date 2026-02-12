@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For Butki ❤️</title>
+
+  <!-- Modern Tipography -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
+    rel="stylesheet">
+  <!-- GSAP for Smooth Animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #ff4d6d;
+      --primary-hover: #ff758f;
+      --bg: #0b0c10;
+      --glass: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --text: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* FALLING HEARTS BACKGROUND */
+    #hearts-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .heart {
+      position: absolute;
+      color: var(--primary);
+      font-size: 20px;
+      opacity: 0.6;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+      }
+    }
+
+    /* DESIGN SYSTEM */
+    .glass-card {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--glass);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      text-align: center;
+      max-width: 90%;
+      width: 500px;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(45deg, #ff4d6d, #ff8fa3);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* MOBILE RESPONSIVENESS */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+
+      .glass-card {
+        padding: 30px 20px;
+        width: 95%;
+      }
+
+      .btn {
+        font-size: 0.9rem;
+      }
+
+      .gallery {
+        height: 300px;
+      }
+
+      .text-content {
+        font-size: 0.95rem;
+      }
+    }
+
+    .subtitle {
+      font-weight: 300;
+      opacity: 0.8;
+      letter-spacing: 1px;
+      margin-bottom: 2rem;
+    }
+
+    /* BUTTONS */
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      align-items: center;
+      /* Center buttons horizontally in column mode */
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      width: 140px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .primary {
+      background: linear-gradient(45deg, var(--primary), var(--primary-hover));
+      color: white;
+      box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+    }
+
+    .primary:hover {
+      transform: scale(1.05) translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 77, 109, 0.6);
+    }
+
+    .ghost {
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .ghost:hover {
+      background: rgba(255, 77, 109, 0.1);
+    }
+
+    #noBtn {
+      position: relative;
+      z-index: 100;
+      margin: 0;
+    }
+
+    /* SCREENS */
+    .screen {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .fade-in {
+      display: flex;
+      flex-direction: column;
+      /* Ensure vertical layout */
+      align-items: center;
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* GALLERY */
+    .gallery {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      height: 400px;
+      /* Increased height */
+      margin: 20px 0;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      /* Show full image */
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .gallery img.active {
+      opacity: 1;
+    }
+
+    .gallery .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 77, 109, 0.3);
+      backdrop-filter: blur(5px);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.3s ease;
+      font-size: 1.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .gallery .arrow:hover {
+      background: var(--primary);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .gallery .arrow.prev {
+      left: 60px;
+    }
+
+    .gallery .arrow.next {
+      right: 60px;
+    }
+
+    /* TEXT SCREENS */
+    .text-content {
+      line-height: 1.8;
+      font-size: 1.1rem;
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    /* LETTER PAGE */
+    #letter {
+      width: 600px;
+      max-width: 95%;
+      padding: 50px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 77, 109, 0.1));
+    }
+
+    .music-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 100;
+      font-size: 1.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    .music-toggle:hover {
+      transform: rotate(15deg) scale(1.1);
+    }
+
+    .music-toggle.playing {
+      animation: pulse 2s infinite;
+    }
+
+    /* TIMELINE */
+    .timeline {
+      position: relative;
+      max-width: 100%;
+      margin: 20px 0;
+      padding-left: 30px;
+      text-align: left;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary), transparent);
+    }
+
+    .timeline-item {
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .timeline-item::before {
+      content: '❤️';
+      position: absolute;
+      left: -40px;
+      top: 0;
+      background: var(--bg);
+      border-radius: 50%;
+      padding: 2px;
+    }
+
+    .timeline-date {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+    }
+
+    /* CLOCK */
+    .clock-container {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .clock-unit {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 12px;
+      min-width: 80px;
+    }
+
+    .clock-val {
+      font-size: 1.8rem;
+      font-weight: 700;
+      display: block;
+    }
+
+    .clock-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    /* COUPONS */
+    .coupon-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      width: 100%;
+      padding: 10px;
+    }
+    
+    .coupon {
+      position: relative;
+      background: linear-gradient(135deg, #fff, #f0f0f0);
+      color: #333;
+      padding: 0;
+      border-radius: 15px;
+      overflow: hidden;
+      display: flex;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      min-height: 100px;
+      border: none;
+    }
+
+    .coupon::before, .coupon::after {
+      content: '';
+      position: absolute;
+      left: 70%;
+      width: 20px;
+      height: 20px;
+      background: var(--bg);
+      border-radius: 50%;
+      z-index: 5;
+    }
+    
+    .coupon::before { top: -10px; }
+    .coupon::after { bottom: -10px; }
+
+    .coupon-left {
+      flex: 7;
+      padding: 20px;
+      text-align: left;
+      border-right: 2px dashed #ccc;
+    }
+    
+    .coupon-right {
+      flex: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .coupon-right:hover {
+      background: var(--primary-hover);
+    }
+
+    .coupon-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+      display: block;
+    }
+    
+    .coupon-serial {
+      font-size: 0.6rem;
+      opacity: 0.6;
+      font-family: monospace;
+    }
+
+    .coupon.redeemed {
+      filter: grayscale(1);
+      opacity: 0.7;
+      pointer-events: none;
+      transform: scale(0.95);
+    }
+
+    .coupon.redeemed .coupon-right {
+      background: #888;
+    }
+
+    .redeem-stamp {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-20deg);
+      border: 4px solid #e74c3c;
+      color: #e74c3c;
+      padding: 5px 15px;
+      font-weight: 900;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+      border-radius: 10px;
+    }
+
+    /* LOVE VAULT */
+    #vault-container {
+      position: relative;
+      width: 300px;
+      height: 350px;
+      margin: 20px auto;
+      background: linear-gradient(145deg, #2a2d34, #1a1c22);
+      border: 4px solid #4a4e5a;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 0 20px rgba(255,255,255,0.05);
+      overflow: hidden;
+      perspective: 1000px;
+    }
+
+    .vault-door {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #3c414b, #282c35);
+      border: 2px solid #5a5f6d;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transform-origin: left;
+      transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .vault-handle {
+      width: 60px;
+      height: 60px;
+      border: 6px solid #b0b5c1;
+      border-radius: 50%;
+      margin-bottom: 20px;
+      position: relative;
+      background: radial-gradient(circle, #4a4e5a 0%, #282c35 100%);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    }
+
+    .vault-handle::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 30px;
+      height: 6px;
+      background: #b0b5c1;
+      transform: translate(-50%, -50%);
+    }
+
+    #vault-input-display {
+      background: #000;
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      letter-spacing: 5px;
+      width: 140px;
+      text-align: center;
+      box-shadow: inset 0 0 10px rgba(0,255,0,0.2);
+    }
+
+    .vault-keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .key-btn {
+      width: 45px;
+      height: 45px;
+      background: #333;
+      border: 1px solid #555;
+      color: white;
+      border-radius: 5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .key-btn:active {
+      background: #555;
+      transform: scale(0.9);
+    }
+
+    .key-btn.clear { background: #e74c3c; font-size: 0.7rem; }
+    .key-btn.enter { background: #2ecc71; font-size: 0.7rem; }
+
+    #vault-reveal {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.5);
+    }
+
+    .floating-heart {
+      font-size: 5rem;
+      filter: drop-shadow(0 0 20px var(--primary));
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* GOLDEN TICKET */
+    .golden-ticket {
+      width: 250px;
+      height: 140px;
+      background: linear-gradient(135deg, #ffd700 0%, #ffac00 50%, #d4af37 100%);
+      border: 4px double #fff;
+      border-radius: 10px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #744d00;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(255,215,0,0.3);
+      padding: 15px;
+      font-family: 'Playfair Display', serif;
+      overflow: hidden;
+    }
+
+    .golden-ticket::before {
+      content: 'ADMIT ONE';
+      position: absolute;
+      top: 50%;
+      left: -35px;
+      transform: translateY(-50%) rotate(-90deg);
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      opacity: 0.5;
+    }
+
+    .golden-ticket::after {
+      content: 'VALENTINE';
+      position: absolute;
+      top: 50%;
+      right: -35px;
+      transform: translateY(-50%) rotate(90deg);
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      opacity: 0.5;
+    }
+
+    .ticket-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      border-bottom: 2px solid #744d00;
+    }
+
+    .ticket-subtitle {
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-top: 10px;
+    }
+
+    .ticket-perforation {
+       position: absolute;
+       top: 0;
+       bottom: 0;
+       left: 20px;
+       border-left: 2px dotted #744d00;
+       opacity: 0.3;
+    }
+
+    /* CTA BUTTONS */
+    .cta-container {
+      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .cta-text {
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.9;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .cta-btn {
+      padding: 10px 20px;
+      border-radius: 25px;
+      border: none;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      font-size: 0.8rem;
+    }
+
+    .cta-btn.whatsapp {
+      background: #25d366;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    }
+
+    .cta-btn.call {
+      background: #3498db;
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      filter: brightness(1.1);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* CURSOR TRAIL */
+    .cursor-trail {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      font-size: 1.2rem;
+      user-select: none;
+    }
+
+    /* LYRIC RAIN */
+    .lyric-item {
+      position: fixed;
+      color: var(--primary);
+      font-weight: 700;
+      pointer-events: none;
+      z-index: 50;
+      white-space: nowrap;
+      text-shadow: 0 0 10px rgba(255, 77, 109, 0.5);
+    }
+
+    /* SHAYARI SLIDER */
+    .shayari-slider {
+      position: relative;
+      width: 100%;
+      min-height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0;
+      padding: 0 60px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      border: 1px solid var(--glass-border);
+    }
+
+    #shayari-text {
+      font-size: 1.25rem;
+      line-height: 1.8;
+      font-style: italic;
+      color: #fff;
+    }
+
+    .shayari-slider .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 77, 109, 0.3);
+      backdrop-filter: blur(5px);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 10;
+    }
+
+    .shayari-slider .arrow:hover {
+      background: var(--primary);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .shayari-slider .arrow.prev { left: 10px; }
+    .shayari-slider .arrow.next { right: 10px; }
+    #garden-canvas {
+      cursor: crosshair;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      margin: 10px 0;
+    }
+
+    /* QUIZ */
+    .quiz-options {
+      display: grid;
+      gap: 10px;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .option-btn {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: white;
+      padding: 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .option-btn:hover {
+      background: rgba(255, 77, 109, 0.1);
+      border-color: var(--primary);
+    }
+
+    .correct {
+      background: #2ecc71 !important;
+    }
+
+    .wrong {
+      background: #e74c3c !important;
+    }
+
+    /* RANDOMIZER */
+    #random-heart {
+      font-size: 5rem;
+      cursor: pointer;
+      display: inline-block;
+      transition: transform 0.3s ease;
+      filter: drop-shadow(0 0 15px var(--primary));
+    }
+
+    #random-heart:hover {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    #love-reason {
+      margin-top: 20px;
+      font-style: italic;
+      min-height: 50px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="hearts-container"></div>
+
+  <!-- OPEN -->
+  <div id="opening" class="glass-card fade-in">
+    <h1>Hey Radhe ❤️</h1>
+    <div class="subtitle">Will you be my Valentine?</div>
+    <div class="btn-group">
+      <button id="yesBtn" class="btn primary">Yes</button>
+      <button id="noBtn" class="btn ghost">No</button>
+    </div>
+  </div>
+
+  <!-- MENU -->
+  <div id="menu" class="glass-card screen">
+    <h1>Hi Butki ❤️</h1>
+    <div class="subtitle">— from your Panda 🐼</div>
+    <div class="btn-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%;">
+      <button class="btn primary" style="width: 100%; font-size: 0.8rem;" onclick="showScreen('memories')">💞
+        Memories</button>
+      <button class="btn primary" style="width: 100%; font-size: 0.8rem;" onclick="showScreen('timeline')">⏳ Our
+        Story</button>
+      <button class="btn primary" style="width: 100%; font-size: 0.8rem;" onclick="showScreen('clock')">⏱️ How
+        Long?</button>
+      <button class="btn primary" style="width: 100%; font-size: 0.8rem;" onclick="showScreen('scratch')">🎁
+        Surprise</button>
+      <button class="btn primary" style="width: 100%; font-size: 0.8rem;" onclick="showScreen('coupons')">🎫
+        Coupons</button>
+      <button class="btn primary" style="width: 100%; font-size: 0.8rem;" onclick="showScreen('garden')">🌸
+        Garden</button>
+      <button class="btn primary" style="width: 100%; font-size: 0.8rem;" onclick="showScreen('quiz')">🧩 Quiz</button>
+      <button class="btn primary" style="width: 100%; font-size: 0.8rem;" onclick="showScreen('randomizer')">💖
+        Reasons</button>
+      <button class="btn primary" style="width: 100%; font-size: 0.8rem;" onclick="showScreen('shayari')">�
+        Shayari</button>
+      <button class="btn primary" style="width: 100%; font-size: 0.8rem;" onclick="showScreen('letter')">💌
+        Message</button>
+    </div>
+  </div>
+
+  <!-- CLOCK -->
+  <div id="clock" class="glass-card screen">
+    <h1>We've been together for</h1>
+    <div class="clock-container">
+      <div class="clock-unit"><span class="clock-val" id="days">00</span><span class="clock-label">Days</span></div>
+      <div class="clock-unit"><span class="clock-val" id="hours">00</span><span class="clock-label">Hours</span></div>
+      <div class="clock-unit"><span class="clock-val" id="minutes">00</span><span class="clock-label">Mins</span></div>
+      <div class="clock-unit"><span class="clock-val" id="seconds">00</span><span class="clock-label">Secs</span></div>
+    </div>
+    <div class="subtitle">...and counting every second ❤️</div>
+    <button class="btn ghost" onclick="showScreen('menu')">Back</button>
+  </div>
+
+  <!-- TIMELINE -->
+  <div id="timeline" class="glass-card screen">
+    <h1>Our Story</h1>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">The Beginning</div>
+        <p>The day Panda met his Butki. Sab kuch badal gaya. ❤️</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">First Date</div>
+        <p>That nervous smile and those beautiful eyes. ✨</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Happiest Moment</div>
+        <p>Every moment with you is the best moment. ❤️</p>
+      </div>
+    </div>
+    <button class="btn ghost" onclick="showScreen('menu')">Back</button>
+  </div>
+
+  <!-- LOVE VAULT -->
+  <div id="scratch" class="glass-card screen">
+    <h1>The Love Vault 🔐</h1>
+    <p class="subtitle">Enter the secret date to unlock</p>
+    <div id="vault-container">
+      <!-- VAULT DOOR -->
+      <div class="vault-door" id="vault-door">
+        <div class="vault-handle"></div>
+        <div id="vault-input-display">____</div>
+        <div class="vault-keypad">
+          <button class="key-btn" onclick="pressKey('1')">1</button>
+          <button class="key-btn" onclick="pressKey('2')">2</button>
+          <button class="key-btn" onclick="pressKey('3')">3</button>
+          <button class="key-btn" onclick="pressKey('4')">4</button>
+          <button class="key-btn" onclick="pressKey('5')">5</button>
+          <button class="key-btn" onclick="pressKey('6')">6</button>
+          <button class="key-btn" onclick="pressKey('7')">7</button>
+          <button class="key-btn" onclick="pressKey('8')">8</button>
+          <button class="key-btn" onclick="pressKey('9')">9</button>
+          <button class="key-btn clear" onclick="clearVault()">CLR</button>
+          <button class="key-btn" onclick="pressKey('0')">0</button>
+          <button class="key-btn enter" onclick="checkVault()">OK</button>
+        </div>
+      </div>
+      <!-- REVEAL CONTENT -->
+      <div id="vault-reveal">
+        <div class="golden-ticket" id="golden-ticket">
+          <div class="ticket-perforation"></div>
+          <div class="ticket-title">Golden Ticket</div>
+          <div style="font-size: 0.9rem; font-weight: 700;">Grand Valentine Date</div>
+          <div class="ticket-subtitle">Dinner • Movie • Panda's Time</div>
+          <div style="font-size: 0.6rem; margin-top: 5px; opacity: 0.8;">Valid Forever for Butki ❤️</div>
+        </div>
+        <div style="color: #fff; margin-top: 20px; font-weight: 700; font-size: 1.1rem; opacity: 0.9;">
+          You Unlocked the Master Prize! 🐼❤️
+        </div>
+        <div class="cta-container">
+          <div class="cta-text">Tell me what you want:</div>
+          <div class="cta-buttons">
+            <a href="https://wa.me/1234567890?text=I%20unlocked%20the%20vault!%20I%20want%20the%20golden%20ticket%20date!%20🐼❤️" target="_blank" class="cta-btn whatsapp">
+              <span>💬</span> WhatsApp
+            </a>
+            <a href="tel:1234567890" class="cta-btn call">
+              <span>📞</span> Call
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn ghost" onclick="showScreen('menu')">Back</button>
+  </div>
+
+  <!-- COUPONS -->
+  <div id="coupons" class="glass-card screen">
+    <h1>Love Coupons</h1>
+    <p class="subtitle">Click to redeem! (Valid forever)</p>
+    <div class="coupon-grid">
+      <!-- Coupon 1 -->
+      <div class="coupon">
+        <div class="coupon-left">
+          <span class="coupon-title">🎟️ One Giant Hug</span>
+          <span class="coupon-serial">SN: LOVE-2024-001</span>
+        </div>
+        <div class="coupon-right" onclick="redeem(this.parentElement)">USE</div>
+        <div class="redeem-stamp">USED</div>
+      </div>
+      <!-- Coupon 2 -->
+      <div class="coupon">
+        <div class="coupon-left">
+          <span class="coupon-title">🎫 Surprise Date</span>
+          <span class="coupon-serial">SN: LOVE-2024-002</span>
+        </div>
+        <div class="coupon-right" onclick="redeem(this.parentElement)">USE</div>
+        <div class="redeem-stamp">USED</div>
+      </div>
+      <!-- Coupon 3 -->
+      <div class="coupon">
+        <div class="coupon-left">
+          <span class="coupon-title">🍰 Late Night Treat</span>
+          <span class="coupon-serial">SN: LOVE-2024-003</span>
+        </div>
+        <div class="coupon-right" onclick="redeem(this.parentElement)">USE</div>
+        <div class="redeem-stamp">USED</div>
+      </div>
+      <!-- Coupon 4 -->
+      <div class="coupon">
+        <div class="coupon-left">
+          <span class="coupon-title">🐼 Panda's Care</span>
+          <span class="coupon-serial">SN: LOVE-2024-004</span>
+        </div>
+        <div class="coupon-right" onclick="redeem(this.parentElement)">USE</div>
+        <div class="redeem-stamp">USED</div>
+      </div>
+    </div>
+    <br>
+    <button class="btn ghost" onclick="showScreen('menu')">Back</button>
+  </div>
+
+  <!-- GARDEN -->
+  <div id="garden" class="glass-card screen">
+    <h1>Our Heart Garden</h1>
+    <p class="subtitle">Click anywhere to plant a flower of love</p>
+    <canvas id="garden-canvas" width="350" height="300"></canvas>
+    <button class="btn ghost" onclick="showScreen('menu')">Back</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz" class="glass-card screen">
+    <h1>Panda's Quiz</h1>
+    <div id="quiz-container">
+      <p id="quiz-question" style="font-size: 1.2rem; margin: 20px 0;">Who is Panda's favorite person?</p>
+      <div class="quiz-options">
+        <button class="option-btn" onclick="checkAnswer(0)">A</button>
+        <button class="option-btn" onclick="checkAnswer(1)">B</button>
+        <button class="option-btn" onclick="checkAnswer(2)">C</button>
+        <button class="option-btn" onclick="checkAnswer(3)">D</button>
+      </div>
+    </div>
+    <div id="quiz-result" style="display: none; flex-direction: column; align-items: center;">
+      <h2 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 1rem;">Perfect Score! ❤️</h2>
+      <p style="font-size: 1.1rem; margin-bottom: 2rem;">You really know Panda better than anyone else! 🐼</p>
+      <div id="certificate" style="border: 2px solid var(--primary); padding: 30px; border-radius: 12px; background: rgba(255, 77, 109, 0.1); margin-bottom: 20px; position: relative;">
+          <h3 style="color: var(--primary);">Awarded to Butki</h3>
+          <p>For being the Best Girl in Panda's World 🌎</p>
+          <div style="font-size: 3rem; margin-top: 10px;">🐼❤️Butki</div>
+      </div>
+    </div>
+    <button class="btn ghost" style="margin-top: 20px;" onclick="showScreen('menu')">Back</button>
+  </div>
+
+  <!-- RANDOMIZER -->
+  <div id="randomizer" class="glass-card screen">
+    <h1>Reasons I Love You</h1>
+    <div id="random-heart" onclick="generateReason()">❤️</div>
+    <div id="love-reason">Click the heart to see why...</div>
+    <button class="btn ghost" style="margin-top: 20px;" onclick="showScreen('menu')">Back</button>
+  </div>
+
+  <!-- MEMORIES -->
+  <div id="memories" class="glass-card screen">
+    <h1>Our Memories</h1>
+    <div class="gallery" id="gallery">
+      <div class="arrow prev" onclick="prevPhoto()">&#10094;</div>
+      <div class="arrow next" onclick="manualNext()">&#10095;</div>
+      <img src="photo1.jpg" class="active">
+      <img src="photo2.jpeg">
+      <!-- Add more images here if they exist -->
+    </div>
+    <button class="btn ghost" onclick="showScreen('menu')">Back</button>
+  </div>
+
+  <!-- SHAYARI -->
+  <div id="shayari" class="glass-card screen">
+    <h1>Shayari</h1>
+    <div class="shayari-slider">
+      <div class="arrow prev" onclick="prevShayari()">&#10094;</div>
+      <div id="shayari-text">
+        <!-- Shayari content will be injected here -->
+      </div>
+      <div class="arrow next" onclick="nextShayari()">&#10095;</div>
+    </div>
+    <button class="btn ghost" onclick="showScreen('menu')">Back</button>
+  </div>
+
+  <!-- LETTER -->
+  <div id="letter" class="glass-card screen">
+    <h1>Dear Butki,</h1>
+    <div class="text-content">
+      <p>Jab tum meri life mein aayi, sab kuch movie jaisa ho gaya. 🎬</p>
+      <br>
+      <p>Tum meri peace ho. Tum meri happiness ho. Tum meri future ho.</p>
+      <br>
+      <p>Panda hamesha Butki ko protect karega, hasayega, aur life bhar pyaar karega. ♾️</p>
+      <br>
+      <p><b>— Panda ❤️</b></p>
+    </div>
+    <button class="btn ghost" onclick="showScreen('menu')">Back</button>
+  </div>
+
+  <div class="music-toggle" onclick="toggleMusic()">🎵</div>
+
+  <audio id="music" loop>
+    <source src="song.mp3">
+  </audio>
+
+  <script>
+    const heartsContainer = document.getElementById('hearts-container');
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const music = document.getElementById("music");
+    const musicToggle = document.querySelector(".music-toggle");
+
+    // SETTINGS
+    const startDate = new Date("2023-12-08T00:00:00"); // Our first meet day! ❤️
+    const reasons = [
+      "The way you smile when you're shy 😊",
+      "Because you are my best friend first 🐼❤️ Butki",
+      "Your panda-like warm hugs 🫂",
+      "The way you care about the smallest things ✨",
+      "You make my world perfect just by being in it 🌎",
+      "Your beautiful eyes that I could stare at forever 😍",
+      "Because you handle my panda moods so well 🐼",
+      "The way you say my name... ❤️"
+    ];
+
+    const shayaris = [
+      "Jisko yaad karne se chehre pr <br> chamak aa jaye...🧸 <br> Woh khubsurat khayal ho tum...🕊️",
+      "Log kehte hain ki nasha sharaab mein hota hai, <br> Shaayad unhone kabhi tumhari aankhein nahi dekhi. 👀❤️",
+      "Kitna pyaar hai tumse, yeh kehna nahi aata, <br> Bas itna jaante hain ki bina tumhare rehna nahi aata. ♾️🫂",
+      "Aapki ek muskurahat hi kaafi hai, <br> Meri duniya ko haseen banane ke liye. ✨😊",
+      "Panda hamesha Butki ke saath rahega, <br> Chahe mausam koi bhi ho. 🐼❤️"
+    ];
+    let currentShayariIndex = 0;
+
+    // FALLING HEARTS
+    function createHeart(x, y, isExplosion = false) {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.innerHTML = '❤️';
+      heart.style.left = (x || Math.random() * 100) + (x ? 'px' : 'vw');
+      if (y) heart.style.top = y + 'px';
+      heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+      heart.style.opacity = Math.random() * 0.5 + 0.3;
+      heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+
+      if (isExplosion) {
+        heart.style.position = 'fixed';
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = Math.random() * 100 + 50;
+        gsap.to(heart, {
+          x: Math.cos(angle) * velocity,
+          y: Math.sin(angle) * velocity,
+          opacity: 0,
+          duration: 1,
+          onComplete: () => heart.remove()
+        });
+      } else {
+        setTimeout(() => heart.remove(), 5000);
+      }
+      heartsContainer.appendChild(heart);
+    }
+    setInterval(() => createHeart(), 300);
+
+    // CURSOR TRAIL
+    document.addEventListener('mousemove', (e) => {
+      if (Math.random() > 0.8) {
+        const trail = document.createElement('div');
+        trail.className = 'cursor-trail';
+        trail.innerHTML = Math.random() > 0.5 ? '❤️' : '🐼';
+        trail.style.left = e.clientX + 'px';
+        trail.style.top = e.clientY + 'px';
+        document.body.appendChild(trail);
+        gsap.to(trail, {
+          y: -50,
+          x: (Math.random() - 0.5) * 50,
+          opacity: 0,
+          scale: 1.5,
+          duration: 1,
+          onComplete: () => trail.remove()
+        });
+      }
+    });
+
+
+    // "NO" BUTTON PLAYFUL LOGIC
+    function moveNo() {
+      noBtn.style.position = "fixed";
+      const margin = 20;
+      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - margin * 2) + margin;
+      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - margin * 2) + margin;
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+
+    noBtn.addEventListener("mouseover", moveNo);
+
+    // NAVIGATION WITH GSAP
+    function showScreen(screenId) {
+      const allScreens = document.querySelectorAll('.glass-card');
+      const target = document.getElementById(screenId);
+
+      // Remove fade-in class to prevent CSS conflicts with GSAP display:none
+      allScreens.forEach(s => s.classList.remove('fade-in'));
+
+      gsap.to(allScreens, {
+        opacity: 0,
+        y: 20,
+        duration: 0.4,
+        display: 'none',
+        onComplete: () => {
+          gsap.set(target, { display: 'flex', opacity: 0, y: 20 });
+          gsap.to(target, { opacity: 1, y: 0, duration: 0.6, ease: "back.out(1.7)" });
+
+          if (screenId === 'memories') startGallery();
+          else stopGallery();
+
+          if (screenId === 'shayari') updateShayariContent();
+          if (screenId === 'clock') startClock();
+          if (screenId === 'garden') initGarden();
+          if (screenId === 'quiz') updateQuiz();
+          if (screenId === 'scratch') clearVault();
+        }
+      });
+    }
+
+    yesBtn.onclick = () => {
+      showScreen('menu');
+      if (music.paused) toggleMusic();
+    };
+
+    // RELATIONSHIP CLOCK
+    let clockInterval;
+    function startClock() {
+      clearInterval(clockInterval);
+      const update = () => {
+        const diff = new Date() - startDate;
+        document.getElementById('days').innerText = String(Math.floor(diff / 864e5)).padStart(2, '0');
+        document.getElementById('hours').innerText = String(Math.floor((diff / 36e5) % 24)).padStart(2, '0');
+        document.getElementById('minutes').innerText = String(Math.floor((diff / 6e4) % 60)).padStart(2, '0');
+        document.getElementById('seconds').innerText = String(Math.floor((diff / 1e3) % 60)).padStart(2, '0');
+      };
+      update();
+      clockInterval = setInterval(update, 1000);
+    }
+
+    // GARDEN
+    function initGarden() {
+      const canvas = document.getElementById('garden-canvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, 350, 300);
+      canvas.onclick = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        drawFlower(ctx, x, y);
+        for (let i = 0; i < 5; i++) createHeart(e.clientX, e.clientY, true);
+      };
+    }
+    function drawFlower(ctx, x, y) {
+      ctx.fillStyle = "#ff4d6d";
+      for (let i = 0; i < 5; i++) {
+        ctx.beginPath();
+        ctx.arc(x + Math.cos(i * 1.2) * 10, y + Math.sin(i * 1.2) * 10, 8, 0, 7);
+        ctx.fill();
+      }
+      ctx.fillStyle = "#ffcc33";
+      ctx.beginPath(); ctx.arc(x, y, 6, 0, 7); ctx.fill();
+    }
+
+    // QUIZ
+    let currentQuizStep = 0;
+    const questions = [
+      { q: "When did our story officially begin? (Our first meet)", o: ["01 Jan 2024", "08 Dec 2023", "14 Feb 2024", "12 Nov 2023"], a: 1 },
+      { q: "Which movie did we watch together for the first time?", o: ["Lalo", "Tere Ishq Me", "Shaiyaara", "Satyaprem Ki Katha"], a: 2 },
+      { q: "What is my favorite thing about you?", o: ["Your beautiful smile", "Your eyes (stare forever)", "Your cute laugh", "Your kind soul"], a: 1 },
+      { q: "What do I do most when I am with you?", o: ["Talk non-stop", "Make bad jokes", "Check my phone", "Just stare at you"], a: 3 },
+      { q: "Where did we go together for the very first time?", o: ["Mcdonald's", "Law Garden", "Riverfront", "Prahladnagar Garden"], a: 0 },
+      { q: "Where should we go for our next big trip?", o: ["To the Beach 🏖️", "To the Mountains 🏔️", "To a new Movie 🍿", "To the Vrindavan 🦚"], a: 3 },
+      { q: "What was the first thing I ever gave you?", o: ["A Rose 🌹", "A Chocolate 🍫", "A small note 📝", "Just my heart ❤️"], a: 3 }
+    ];
+    function checkAnswer(idx) {
+      const btns = document.querySelectorAll('.option-btn');
+      if (idx === questions[currentQuizStep].a) {
+        btns[idx].classList.add('correct');
+        setTimeout(() => {
+          currentQuizStep++;
+          if (currentQuizStep >= questions.length) {
+            finishQuiz();
+          } else {
+            updateQuiz();
+          }
+        }, 800);
+      } else {
+        btns[idx].classList.add('wrong');
+        setTimeout(() => btns[idx].classList.remove('wrong'), 500);
+      }
+    }
+    function updateQuiz() {
+      document.getElementById('quiz-container').style.display = 'block';
+      document.getElementById('quiz-result').style.display = 'none';
+      const q = questions[currentQuizStep];
+      document.getElementById('quiz-question').innerText = q.q;
+      const btns = document.querySelectorAll('.quiz-options .option-btn');
+      btns.forEach((b, i) => {
+        if (q.o[i]) {
+          b.innerText = q.o[i];
+          b.style.display = 'block';
+        } else {
+          b.style.display = 'none';
+        }
+        b.classList.remove('correct', 'wrong');
+      });
+    }
+
+    function finishQuiz() {
+      document.getElementById('quiz-container').style.display = 'none';
+      const result = document.getElementById('quiz-result');
+      result.style.display = 'flex';
+      
+      // Explosion effect
+      for (let i = 0; i < 50; i++) {
+        setTimeout(() => createHeart(window.innerWidth / 2, window.innerHeight / 2, true), i * 30);
+      }
+      
+      gsap.from("#certificate", {
+        scale: 0.5,
+        opacity: 0,
+        rotation: -10,
+        duration: 1,
+        ease: "back.out(1.7)"
+      });
+    }
+
+    // RANDOMIZER
+    function generateReason() {
+      const el = document.getElementById('love-reason');
+      const r = reasons[Math.floor(Math.random() * reasons.length)];
+      gsap.to(el, {
+        opacity: 0, y: 10, duration: 0.3, onComplete: () => {
+          el.innerText = r;
+          gsap.to(el, { opacity: 1, y: 0, duration: 0.3 });
+        }
+      });
+      gsap.to('#random-heart', { scale: 1.3, duration: 0.1, yoyo: true, repeat: 1 });
+    }
+
+    // LOVE VAULT LOGIC
+    let vaultInput = "";
+    const secretCode = "0812";
+
+    function pressKey(num) {
+      if (vaultInput.length < 4) {
+        vaultInput += num;
+        document.getElementById('vault-input-display').innerText = vaultInput.padEnd(4, '_');
+      }
+    }
+
+    function clearVault() {
+      vaultInput = "";
+      document.getElementById('vault-input-display').innerText = "____";
+    }
+
+    function checkVault() {
+      if (vaultInput === secretCode) {
+        // SUCCESS
+        gsap.to("#vault-door", {
+          rotateY: -110,
+          duration: 1.5,
+          ease: "power2.inOut",
+          onComplete: () => {
+            gsap.to("#vault-reveal", {
+              opacity: 1,
+              scale: 1,
+              duration: 0.8,
+              ease: "back.out(1.7)"
+            });
+            gsap.from("#golden-ticket", {
+              y: 50,
+              opacity: 0,
+              duration: 1,
+              delay: 0.5,
+              ease: "power2.out"
+            });
+            for (let i = 0; i < 40; i++) {
+              setTimeout(() => createHeart(window.innerWidth / 2, window.innerHeight / 2, true), i * 40);
+            }
+          }
+        });
+      } else {
+        // WRONG CODE
+        gsap.to("#vault-door", {
+          x: 10,
+          duration: 0.1,
+          repeat: 5,
+          yoyo: true,
+          onComplete: () => {
+            gsap.set("#vault-door", { x: 0 });
+            clearVault();
+          }
+        });
+      }
+    }
+
+    // COUPONS
+    function redeem(el) {
+      if (el.classList.contains('redeemed')) return;
+      el.classList.add('redeemed');
+      
+      const stamp = el.querySelector('.redeem-stamp');
+      gsap.to(stamp, {
+        opacity: 1,
+        scale: 1.2,
+        duration: 0.3,
+        ease: "bounce.out",
+        onComplete: () => {
+          gsap.to(stamp, { scale: 1, duration: 0.2 });
+        }
+      });
+
+      for (let i = 0; i < 30; i++) {
+        setTimeout(() => createHeart(window.innerWidth / 2, window.innerHeight / 2, true), i * 50);
+      }
+    }
+
+    // GALLERY LOGIC
+    let galleryInterval, currentPhotoIndex = 0;
+    function startGallery() { stopGallery(); galleryInterval = setInterval(nextPhoto, 3000); }
+    function stopGallery() { clearInterval(galleryInterval); }
+    function updateGallery(isNext = true) {
+      const photos = document.querySelectorAll('#gallery img');
+      if (!photos.length) return;
+      const current = photos[currentPhotoIndex];
+      photos.forEach(img => {
+        img.classList.remove('active', 'prev-out');
+        gsap.set(img, { clearProps: "all" });
+      });
+      current.classList.add('active');
+    }
+    function nextPhoto() {
+      const photos = document.querySelectorAll('#gallery img');
+      if (photos.length === 0) return;
+      const current = photos[currentPhotoIndex];
+      gsap.to(current, {
+        rotationY: -110, opacity: 0, duration: 1, ease: "power2.inOut", onComplete: () => {
+          current.classList.remove('active');
+          currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+          const next = photos[currentPhotoIndex];
+          gsap.set(next, { rotationY: 110, opacity: 0 });
+          next.classList.add('active');
+          gsap.to(next, { rotationY: 0, opacity: 1, duration: 1, ease: "power2.out" });
+        }
+      });
+    }
+    function prevPhoto() {
+      const photos = document.querySelectorAll('#gallery img');
+      if (photos.length === 0) return;
+      const current = photos[currentPhotoIndex];
+      gsap.to(current, {
+        rotationY: 110, opacity: 0, duration: 1, ease: "power2.inOut", onComplete: () => {
+          current.classList.remove('active');
+          currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
+          const prev = photos[currentPhotoIndex];
+          gsap.set(prev, { rotationY: -110, opacity: 0 });
+          prev.classList.add('active');
+          gsap.to(prev, { rotationY: 0, opacity: 1, duration: 1, ease: "power2.out" });
+        }
+      });
+      startGallery();
+    }
+    function manualNext() { nextPhoto(); startGallery(); }
+
+    // SHAYARI LOGIC
+    function updateShayariContent() {
+      const el = document.getElementById('shayari-text');
+      if (!el) return;
+      gsap.to(el, {
+        opacity: 0, y: 10, duration: 0.3, onComplete: () => {
+          el.innerHTML = shayaris[currentShayariIndex];
+          gsap.to(el, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" });
+        }
+      });
+    }
+    function nextShayari() {
+      currentShayariIndex = (currentShayariIndex + 1) % shayaris.length;
+      updateShayariContent();
+    }
+    function prevShayari() {
+      currentShayariIndex = (currentShayariIndex - 1 + shayaris.length) % shayaris.length;
+      updateShayariContent();
+    }
+
+    // MUSIC
+    function toggleMusic() {
+      if (music.paused) { music.play().catch(e => 0); musicToggle.classList.add('playing'); }
+      else { music.pause(); musicToggle.classList.remove('playing'); }
+    }
+  </script>
+
+</body>
+
+</html>

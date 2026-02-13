@@ -7,7 +7,7 @@
   <!-- Privacy: Prevent search engines from indexing this page -->
   <meta name="robots" content="noindex, nofollow">
   <meta name="googlebot" content="noindex, nofollow">
-  <title>For Butki ❤️</title>
+  <title>Butki's Forever Valentine 🐼❤️</title>
 
   <!-- Modern Tipography -->
   <link
@@ -208,30 +208,69 @@
       }
     }
 
-    /* GALLERY */
+    /* BOOK STYLE GALLERY */
     .gallery {
       position: relative;
       width: 100%;
-      max-width: 400px;
-      height: 400px;
-      /* Increased height */
+      max-width: 350px;
+      height: 450px;
       margin: 20px 0;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      background: rgba(0, 0, 0, 0.2);
+      perspective: 1500px;
+      background: transparent;
+      box-shadow: none;
+      overflow: visible; /* Need overflow visible for 3D flip */
     }
 
-    .gallery img {
+    .book {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.5s;
+    }
+
+    .book-page {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      transform-origin: left;
+      transform-style: preserve-3d;
+      transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+      z-index: 1;
+      cursor: pointer;
+    }
+
+    .book-page img {
       width: 100%;
       height: 100%;
       object-fit: contain;
-      /* Show full image */
+      background: #1a1c22; /* Dark background for non-matching aspect ratios */
+      border-radius: 0 15px 15px 0;
+      box-shadow: 10px 0 20px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      backface-visibility: hidden;
       position: absolute;
       top: 0;
       left: 0;
-      opacity: 0;
-      transition: opacity 1s ease;
+    }
+
+    /* Spine effect */
+    .book-page::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 10px;
+      height: 100%;
+      background: linear-gradient(to right, rgba(0,0,0,0.5), transparent);
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .book-page.flipped {
+      transform: rotateY(-180deg);
     }
 
     .gallery img.active {
@@ -373,6 +412,7 @@
       margin: 20px 0;
       flex-wrap: wrap;
     }
+
 
     .clock-unit {
       background: rgba(255, 255, 255, 0.1);
@@ -627,6 +667,7 @@
       padding: 15px;
       font-family: 'Playfair Display', serif;
       overflow: hidden;
+      margin: 0 auto; /* Enhance centering */
     }
 
     .golden-ticket::before {
@@ -678,7 +719,7 @@
 
     /* CTA BUTTONS */
     .cta-container {
-      margin-top: 15px;
+      margin-top: 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -698,6 +739,18 @@
     .cta-buttons {
       display: flex;
       gap: 15px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .gift-selection {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 280px;
+      opacity: 0;
+      transform: translateY(10px);
     }
 
     .cta-btn {
@@ -709,10 +762,30 @@
       cursor: pointer;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       transition: all 0.3s ease;
       text-decoration: none;
       font-size: 0.8rem;
+    }
+
+    .cta-btn.gift {
+      width: 100%;
+      padding: 12px 20px;
+      font-size: 0.9rem;
+    }
+
+    .cta-btn.back {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--glass-border);
+      color: #ccc;
+      margin-top: 5px;
+      width: 100%;
+    }
+
+    .cta-btn.back:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
     }
 
     .cta-btn.whatsapp {
@@ -729,6 +802,49 @@
       transform: translateY(-3px) scale(1.05);
       filter: brightness(1.1);
     }
+
+    /* PREMIUM GIFT BUTTONS */
+    .gift-btn {
+      width: 100%;
+      padding: 15px;
+      border-radius: 50px;
+      border: none;
+      color: white;
+      font-weight: 800;
+      font-size: 1rem;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      text-decoration: none;
+      margin-bottom: 8px;
+    }
+    .gift-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    .gift-btn:active { transform: scale(0.98); }
+
+    .gift-dinner { background: linear-gradient(45deg, #25d366, #128c7e); box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
+    .gift-movie { background: linear-gradient(45deg, #ff5722, #e64a19); box-shadow: 0 4px 15px rgba(255, 87, 34, 0.4); }
+    .gift-drive { background: linear-gradient(45deg, #9c27b0, #7b1fa2); box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4); }
+
+    /* VAULT STEPS */
+    #vault-step-1, #vault-step-2 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    #vault-step-1 {
+      justify-content: flex-start;
+      padding-top: 50px; /* Adjusted padding to move ticket slightly up */
+    }
+
 
     @keyframes float {
       0%, 100% { transform: translateY(0); }
@@ -897,11 +1013,11 @@
 
   <!-- OPEN -->
   <div id="opening" class="glass-card fade-in">
-    <h1>Hey Radhe ❤️</h1>
+    <h1>Hey Radhe </h1>
     <div class="subtitle">Will you be my Valentine?</div>
     <div class="btn-group">
-      <button id="yesBtn" class="btn primary">Yes</button>
-      <button id="noBtn" class="btn ghost">No</button>
+      <button id="yesBtn" class="btn primary">Yes ❤️</button>
+      <button id="noBtn" class="btn ghost">No 😄</button>
     </div>
   </div>
 
@@ -991,25 +1107,52 @@
       </div>
       <!-- REVEAL CONTENT -->
       <div id="vault-reveal">
-        <div class="golden-ticket" id="golden-ticket">
-          <div class="ticket-perforation"></div>
-          <div class="ticket-title">Golden Ticket</div>
-          <div style="font-size: 0.9rem; font-weight: 700;">Grand Valentine Date</div>
-          <div class="ticket-subtitle">Dinner • Movie • Panda's Time</div>
-          <div style="font-size: 0.6rem; margin-top: 5px; opacity: 0.8;">Valid Forever for Butki ❤️</div>
+        <!-- STEP 1: Master Prize Reveal -->
+        <div id="vault-step-1">
+          <div class="golden-ticket" id="golden-ticket">
+            <div class="ticket-perforation"></div>
+            <div class="ticket-title">Golden Ticket</div>
+            <div style="font-size: 0.9rem; font-weight: 700;">Grand Valentine Date</div>
+            <div class="ticket-subtitle">Dinner • Movie • Long Drive</div>
+            <div style="font-size: 0.6rem; margin-top: 5px; opacity: 0.8;">Valid for a Lifetime of Love ❤️</div>
+          </div>
+          <div style="color: #fff; margin-top: 10px; font-weight: 700; font-size: 1.1rem; opacity: 0.9;">
+            You Unlocked the Master Prize! 🐼❤️
+          </div>
+          <div class="cta-container">
+            <div id="vault-main-btns" style="width: 100%;">
+              <div class="cta-buttons">
+                <button onclick="showGiftOptions()" class="cta-btn whatsapp">
+                  <span>💬</span> WhatsApp
+                </button>
+                <a href="tel:9106753003" class="cta-btn call">
+                  <span>📞</span> Call
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-        <div style="color: #fff; margin-top: 20px; font-weight: 700; font-size: 1.1rem; opacity: 0.9;">
-          You Unlocked the Master Prize! 🐼❤️
-        </div>
-        <div class="cta-container">
-          <div class="cta-text">Tell me what you want:</div>
-          <div class="cta-buttons">
-            <a href="https://wa.me/1234567890?text=I%20unlocked%20the%20vault!%20I%20want%20the%20golden%20ticket%20date!%20🐼❤️" target="_blank" class="cta-btn whatsapp">
-              <span>💬</span> WhatsApp
-            </a>
-            <a href="tel:1234567890" class="cta-btn call">
-              <span>📞</span> Call
-            </a>
+
+        <!-- STEP 2: Gift Selection -->
+        <div id="vault-step-2" style="display: none; opacity: 0;">
+          <div class="cta-container">
+            <div id="vault-gift-btns" style="width: 100%; max-width: 280px;">
+              <div class="cta-text" style="margin-bottom: 20px; font-size: 1.1rem;">CHOOSE YOUR SURPRICE:</div>
+              <div class="cta-buttons" style="flex-direction: column; gap: 0;">
+                <button onclick="openWhatsAppPrompt('dinner')" class="gift-btn gift-dinner">
+                  <span>🍽️</span> Romantic Dinner Date
+                </button>
+                <button onclick="openWhatsAppPrompt('movie')" class="gift-btn gift-movie">
+                  <span>🎬</span> Romantic Movie Date
+                </button>
+                <button onclick="openWhatsAppPrompt('drive')" class="gift-btn gift-drive">
+                  <span>🚗</span> Long Drive & Ice Cream
+                </button>
+                <button onclick="hideGiftOptions()" class="cta-btn back" style="margin-top: 10px;">
+                  <span>⬅️</span> Back
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1112,12 +1255,20 @@
   <!-- MEMORIES -->
   <div id="memories" class="glass-card screen">
     <div class="gallery" id="gallery">
-      <div class="arrow prev" onclick="prevPhoto()">&#10094;</div>
-      <div class="arrow next" onclick="manualNext()">&#10095;</div>
-      <img src="Photo1.jpeg" class="active">
-      <img src="Photo2.jpeg">
-      <img src="Photo3.jpeg">
-      <img src="Photo4.jpeg">
+      <div class="arrow prev" onclick="prevPhoto()" style="left: -50px;">&#10094;</div>
+      <div class="arrow next" onclick="manualNext()" style="right: -50px;">&#10095;</div>
+      <div class="book" id="book">
+        <div class="book-page"><img src="Photo1.jpeg"></div>
+        <div class="book-page"><img src="Photo3.jpeg"></div>
+        <div class="book-page"><img src="Photo4.jpeg"></div>
+        <div class="book-page"><img src="Photo6.jpeg"></div>
+        <div class="book-page"><img src="Photo7.jpeg"></div>
+        <div class="book-page"><img src="Photo5.jpeg"></div>
+        <div class="book-page"><img src="Photo9.jpeg"></div>
+        <div class="book-page"><img src="Photo8.jpeg"></div>
+        <div class="book-page"><img src="Photo2.jpeg"></div>
+        <div class="book-page"><img src="Photo10.jpeg"></div>
+      </div>
     </div>
     <div id="memory-caption">Our first photo together 📸</div>
     <button class="btn ghost" style="margin-top: 20px;" onclick="showScreen('menu')">Back</button>
@@ -1140,9 +1291,9 @@
   <div id="letter" class="glass-card screen">
     <h1>Dear Butki,</h1>
     <div class="text-content">
-      <p>Jab tum meri life mein aayi, sab kuch movie jaisa ho gaya. 🎬</p>
+      <p>Jab tum meri Life mein aayi, sab kuch Movie jaisa ho gaya. 🎬</p>
       <br>
-      <p>Tum meri peace ho. Tum meri happiness ho. Tum meri future ho.</p>
+      <p>Tum meri Peace ho. Tum meri Happiness ho. Tum meri Sukoon ho. ✨</p>
       <br>
       <p>Panda hamesha Butki ko protect karega, hasayega, aur life bhar pyaar karega. ♾️</p>
       <br>
@@ -1548,7 +1699,7 @@
 
     // LOVE VAULT LOGIC
     let vaultInput = "";
-    const secretCode = "0812";
+    const secretCode = "1206";
 
     function pressKey(num) {
       if (vaultInput.length < 4) {
@@ -1562,9 +1713,68 @@
       document.getElementById('vault-input-display').innerText = "____";
     }
 
+    function showGiftOptions() {
+      const step1 = document.getElementById('vault-step-1');
+      const step2 = document.getElementById('vault-step-2');
+      
+      gsap.to(step1, {
+        opacity: 0,
+        y: -20,
+        duration: 0.4,
+        onComplete: () => {
+          step1.style.display = 'none';
+          step2.style.display = 'block';
+          gsap.to(step2, {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: "power2.out"
+          });
+        }
+      });
+    }
+
+    function hideGiftOptions() {
+      const step1 = document.getElementById('vault-step-1');
+      const step2 = document.getElementById('vault-step-2');
+      
+      gsap.to(step2, {
+        opacity: 0,
+        y: 20,
+        duration: 0.4,
+        onComplete: () => {
+          step2.style.display = 'none';
+          step1.style.display = 'block';
+          gsap.to(step1, {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: "power2.out"
+          });
+        }
+      });
+    }
+
+    function openWhatsAppPrompt(plan) {
+      const base = "https://wa.me/9106753003?text=";
+      let msg = "";
+      // Using pre-encoded strings to bypass all charset issues
+      if(plan === 'dinner') msg = "I%20unlocked%20the%20vault!%20I%20want%20the%20Romantic%20Dinner%20Date!%20%F0%9F%8D%BD%EF%B8%8F%E2%9D%A4%EF%B8%8F";
+      else if(plan === 'movie') msg = "I%20unlocked%20the%20vault!%20I%20want%20the%20Romantic%20Movie%20Date!%20%F0%9F%8E%AC%E2%9D%A4%EF%B8%8F";
+      else if(plan === 'drive') msg = "I%20unlocked%20the%20vault!%20I%20want%20the%20Long%20Drive%20and%20Ice%20Cream!%20%F0%9F%9A%97%F0%9F%8D%A6%E2%9D%A4%EF%B8%8F";
+      
+      window.open(base + msg, '_blank');
+    }
+
     function checkVault() {
       if (vaultInput === secretCode) {
         // SUCCESS
+        // Reset to Step 1
+        document.getElementById('vault-step-1').style.display = 'block';
+        document.getElementById('vault-step-1').style.opacity = '1';
+        document.getElementById('vault-step-1').style.transform = 'translateY(0)';
+        document.getElementById('vault-step-2').style.display = 'none';
+        
         gsap.to("#vault-door", {
           rotateY: -110,
           duration: 1.5,
@@ -1624,13 +1834,19 @@
       }
     }
 
-    // GALLERY LOGIC
+    // NEW BOOK GALLERY LOGIC
     let galleryInterval, currentPhotoIndex = 0;
     const photoCaptions = [
       "Our first photo together 📸",
-      "My absolute favorite photo together ❤️",
       "The memory of our first trip ✈️",
-      "Traditional Look – Simply Stunning ✨"
+      "Traditional Look – Simply Stunning ✨",
+      "My Artist with her beautiful creations 🎨✨",
+      "Sweet moments of you feeding me 🍎🍰",
+      "You give me gifts that I'll always cherish 🎁❤️",
+      "Stuck in a trance when you wear this... 😍👗",
+      "The moment I put a ring on your finger 💍💞",
+      "My absolute favorite photo together ❤️",
+      "The latest beautiful page in my love Gallery 📖❤️"
     ];
 
     function updateCaption() {
@@ -1643,52 +1859,56 @@
       }
     }
 
-    function startGallery() { stopGallery(); galleryInterval = setInterval(nextPhoto, 3000); }
+    function initBook() {
+      const pages = document.querySelectorAll('.book-page');
+      pages.forEach((page, idx) => {
+        page.style.zIndex = pages.length - idx;
+      });
+    }
+
+    function startGallery() { 
+      stopGallery(); 
+      galleryInterval = setInterval(nextPhoto, 5000); 
+    }
     function stopGallery() { clearInterval(galleryInterval); }
-    function updateGallery(isNext = true) {
-      const photos = document.querySelectorAll('#gallery img');
-      if (!photos.length) return;
-      const current = photos[currentPhotoIndex];
-      photos.forEach(img => {
-        img.classList.remove('active', 'prev-out');
-        gsap.set(img, { clearProps: "all" });
-      });
-      current.classList.add('active');
-    }
+
     function nextPhoto() {
-      const photos = document.querySelectorAll('#gallery img');
-      if (photos.length === 0) return;
-      const current = photos[currentPhotoIndex];
-      gsap.to(current, {
-        rotationY: -110, opacity: 0, duration: 1, ease: "power2.inOut", onComplete: () => {
-          current.classList.remove('active');
-          currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
-          updateCaption();
-          const next = photos[currentPhotoIndex];
-          gsap.set(next, { rotationY: 110, opacity: 0 });
-          next.classList.add('active');
-          gsap.to(next, { rotationY: 0, opacity: 1, duration: 1, ease: "power2.out" });
-        }
-      });
+      const pages = document.querySelectorAll('.book-page');
+      if (currentPhotoIndex >= pages.length - 1) {
+        // Reset book
+        pages.forEach((page, idx) => {
+          page.classList.remove('flipped');
+          page.style.zIndex = pages.length - idx;
+        });
+        currentPhotoIndex = 0;
+        updateCaption();
+        return;
+      }
+
+      const currentPage = pages[currentPhotoIndex];
+      currentPage.classList.add('flipped');
+      currentPage.style.zIndex = currentPhotoIndex + 1;
+      
+      currentPhotoIndex++;
+      updateCaption();
     }
+
     function prevPhoto() {
-      const photos = document.querySelectorAll('#gallery img');
-      if (photos.length === 0) return;
-      const current = photos[currentPhotoIndex];
-      gsap.to(current, {
-        rotationY: 110, opacity: 0, duration: 1, ease: "power2.inOut", onComplete: () => {
-          current.classList.remove('active');
-          currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
-          updateCaption();
-          const prev = photos[currentPhotoIndex];
-          gsap.set(prev, { rotationY: -110, opacity: 0 });
-          prev.classList.add('active');
-          gsap.to(prev, { rotationY: 0, opacity: 1, duration: 1, ease: "power2.out" });
-        }
-      });
+      const pages = document.querySelectorAll('.book-page');
+      if (currentPhotoIndex <= 0) return;
+
+      currentPhotoIndex--;
+      const pageToUnflip = pages[currentPhotoIndex];
+      pageToUnflip.classList.remove('flipped');
+      pageToUnflip.style.zIndex = pages.length - currentPhotoIndex;
+      
+      updateCaption();
       startGallery();
     }
     function manualNext() { nextPhoto(); startGallery(); }
+    
+    // Call initBook on load
+    window.addEventListener('DOMContentLoaded', initBook);
 
     // SHAYARI LOGIC
     function updateShayariContent() {
